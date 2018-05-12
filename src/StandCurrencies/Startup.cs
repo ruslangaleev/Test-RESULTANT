@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StandCurrencies.Services.Infrastructure;
 
 namespace StandCurrencies
 {
@@ -22,6 +23,7 @@ namespace StandCurrencies
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,6 +38,11 @@ namespace StandCurrencies
             {
                 app.UseExceptionHandler("/Error");
             }
+
+            app.UseSignalR(route =>
+            {
+                route.MapHub<SignalServer>("signalServer");
+            });
 
             app.UseStaticFiles();
 
