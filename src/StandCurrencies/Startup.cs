@@ -49,6 +49,7 @@ namespace StandCurrencies
                 route.MapHub<SignalServer>("/signalServer");
             });
 
+            app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseMvc();
