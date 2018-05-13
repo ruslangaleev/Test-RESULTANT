@@ -4,10 +4,42 @@
     ViewData["Title"] = "Home page";
 }
 
-<script>
+<h1>Тестовое</h1>
+
+<div class="row" id="data">
+
+</div>
+
+<script src="~/js/signalr.js"></script>
+
+<script type="text/javascript">
 
     function getData() {
+        $.ajax({
+            url: "api",
+            method: "GET",
+            success: function (result) {
+                // head table
+                var thead = '<thead><tr>'
+                    + '<th scope="col">Название валюты</th>'
+                    + '<th scope="col">Цена</th>'
+                    + '<th scope="col">Количество</th>'
+                    + '</tr></thead>';
 
+                // body table
+                var tbody = "<tbody>";
+                result.forEach(element => {
+                    tbody = tbody + '<tr>'
+                        + '<td>' + element.name + '</td>'
+                        + '<td>' + element.valume + '</td>'
+                        + '<td>' + element.amount + '</td>'
+                        + '</tr>';
+                })
+                tbody = tbody + '</tbody>'
+
+                $("#data").html('<table class="table">' + thead + tbody + '</table>');
+            }
+        })
 
     }
 

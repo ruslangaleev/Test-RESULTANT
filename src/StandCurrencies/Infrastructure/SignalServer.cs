@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace StandCurrencies.Services.Infrastructure
 {
-    class SignalServer
+    public class SignalServer : Hub
     {
     }
 }
