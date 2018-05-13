@@ -11,6 +11,6 @@ namespace StandCurrencies.Services.Interfaces
     /// </summary>
     public interface IPhisixClient
     {
-        Task<IEnumerable<PhisixEntry>> GetData();
+        Task<ResponseModel> GetData();
     }
 }

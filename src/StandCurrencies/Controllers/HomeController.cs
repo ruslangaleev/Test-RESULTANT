@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using StandCurrencies.ResourceModels;
-using StandCurrencies.Services.Infrastructure;
+using StandCurrencies.Services.Interfaces;
+using StandCurrencies.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace StandCurrencies.Controllers
@@ -12,39 +10,30 @@ namespace StandCurrencies.Controllers
     [Route("api")]
     public class HomeController : Controller
     {
-        private readonly IHubContext<SignalServer> _hubContext;
+        private readonly IPhisixClient _phisixClient;
 
-        public HomeController(IHubContext<SignalServer> hubContext)
+        public HomeController(IPhisixClient phisixClient)
         {
-            _hubContext = hubContext ?? throw new ArgumentNullException(nameof(IHubContext<SignalServer>));
+            _phisixClient = phisixClient ?? throw new ArgumentNullException(nameof(IPhisixClient));
         }
 
         [HttpGet]
-        public PhisixEntry[] GetData()
+        public async Task<DataModel[]> GetData()
         {
-            var list = new List<PhisixEntry>
+            List<DataModel> dataModels = new List<DataModel>();
+
+            var result = await _phisixClient.GetData();
+            foreach (var entry in result.stock)
             {
-                new PhisixEntry
+                dataModels.Add(new DataModel
                 {
-                    name = "Первая запись",
-                    amount = 10,
-                    valume = 10
-                },
-                new PhisixEntry
-                {
-                    name = "Вторая запись",
-                    amount = 20,
-                    valume = 20
-                }
-            };
+                    Name = entry.name,
+                    Amount = entry.price.amount,
+                    Volume = entry.volume
+                });
+            }
 
-            return list.ToArray();
-        }
-
-        [HttpPost]
-        public void Start()
-        {
-            _hubContext.Clients.All.SendAsync("displayNotification");
+            return dataModels.ToArray();
         }
     }
 }

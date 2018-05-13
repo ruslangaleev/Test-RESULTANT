@@ -1,52 +1,57 @@
-﻿@page
-@model IndexModel
-@{
-    ViewData["Title"] = "Home page";
-}
+﻿<!DOCTYPE html>
+<html>
+<head>
 
-<h1>Тестовое</h1>
+    <meta charset="utf-8" />
 
-<div class="row" id="data">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+</head>
+<body>
+    <h3>Список валют</h3>
 
-</div>
+    <div class="row" id="data">
 
-<script src="~/js/signalr.js"></script>
+    </div>
 
-<script type="text/javascript">
+    <script src="~/js/signalr.js"></script>
 
-    function getData() {
-        $.ajax({
-            url: "api",
-            method: "GET",
-            success: function (result) {
-                // head table
-                var thead = '<thead><tr>'
-                    + '<th scope="col">Название валюты</th>'
-                    + '<th scope="col">Цена</th>'
-                    + '<th scope="col">Количество</th>'
-                    + '</tr></thead>';
+    <script type="text/javascript">
 
-                // body table
-                var tbody = "<tbody>";
-                result.forEach(element => {
-                    tbody = tbody + '<tr>'
-                        + '<td>' + element.name + '</td>'
-                        + '<td>' + element.valume + '</td>'
-                        + '<td>' + element.amount + '</td>'
-                        + '</tr>';
-                })
-                tbody = tbody + '</tbody>'
+        function getData() {
+            $.ajax({
+                url: "api",
+                method: "GET",
+                success: function (result) {
+                    // head table
+                    var thead = '<thead><tr>'
+                        + '<th scope="col">Название валюты</th>'
+                        + '<th scope="col">Цена</th>'
+                        + '<th scope="col">Количество</th>'
+                        + '</tr></thead>';
 
-                $("#data").html('<table class="table">' + thead + tbody + '</table>');
-            }
-        })
+                    // body table
+                    var tbody = "<tbody>";
+                    result.forEach(element => {
+                        tbody = tbody + '<tr>'
+                            + '<td>' + element.name + '</td>'
+                            + '<td>' + element.volume + '</td>'
+                            + '<td>' + element.amount + '</td>'
+                            + '</tr>';
+                    })
+                    tbody = tbody + '</tbody>'
 
-    }
+                    $("#data").html('<table class="table">' + thead + tbody + '</table>');
+                }
+            })
 
-    let connection = new signalR.HubConnection("/signalServer");
-    connection.on('displayNotification', () => {
-        getData();
-    });
-    connection.start();
+        }
 
-</script>
+        let connection = new signalR.HubConnection("/signalServer");
+        connection.on('displayNotification', () => {
+            getData();
+        });
+        connection.start();
+
+    </script>
+</body>
+</html>
