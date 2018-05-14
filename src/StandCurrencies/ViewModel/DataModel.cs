@@ -11,6 +11,6 @@ namespace StandCurrencies.ViewModel
 
         public int Volume { get; set; }
 
-        public double Amount { get; set; }
+        public string Amount { get; set; }
     }
 }
