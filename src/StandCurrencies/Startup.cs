@@ -54,7 +54,8 @@ namespace StandCurrencies
 
             app.UseMvc();
 
-            new Reminder(serviceProvider.GetRequiredService<IHubContext<SignalServer>>()).Start();
+            new Reminder(serviceProvider.GetRequiredService<IHubContext<SignalServer>>(),
+                serviceProvider.GetRequiredService<IConfiguration>()).Start();
         }
     }
 }
