@@ -4,6 +4,7 @@ using StandCurrencies.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace StandCurrencies.Controllers
 {
@@ -33,7 +34,9 @@ namespace StandCurrencies.Controllers
             List<DataModel> dataModels = new List<DataModel>();
 
             var result = await _phisixClient.GetData();
-            foreach (var entry in result.stock)
+
+            // TODO: will add pagination?
+            foreach (var entry in result.stock.Take(50))
             {
                 dataModels.Add(new DataModel
                 {
