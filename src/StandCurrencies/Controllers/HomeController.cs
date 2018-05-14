@@ -10,13 +10,23 @@ namespace StandCurrencies.Controllers
     [Route("api")]
     public class HomeController : Controller
     {
+        /// <summary>
+        /// Клиент сервера phisix
+        /// </summary>
         private readonly IPhisixClient _phisixClient;
 
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="phisixClient"></param>
         public HomeController(IPhisixClient phisixClient)
         {
             _phisixClient = phisixClient ?? throw new ArgumentNullException(nameof(IPhisixClient));
         }
 
+        /// <summary>
+        /// Возвращает список валют
+        /// </summary>
         [HttpGet]
         public async Task<DataModel[]> GetData()
         {

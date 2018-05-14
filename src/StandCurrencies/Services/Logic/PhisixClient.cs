@@ -3,8 +3,6 @@ using Newtonsoft.Json;
 using StandCurrencies.ResourceModels;
 using StandCurrencies.Services.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -15,15 +13,27 @@ namespace StandCurrencies.Services.Logic
     /// </summary>
     public class PhisixClient : IPhisixClient
     {
+        /// <summary>
+        /// HTTP клиент сервера http://phisix-api3.appspot.com
+        /// </summary>
         private readonly HttpClient _httpClient = new HttpClient();
 
-        public PhisixClient()
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        public PhisixClient(IConfiguration configuration)
         {
-            _httpClient.BaseAddress = new Uri("http://phisix-api3.appspot.com");
+            var baseUrl = configuration["Phisix:BaseUrl"];
+            if (string.IsNullOrEmpty(baseUrl))
+            {
+                throw new ArgumentNullException("Ошибка чтение конфига Phisix:Url");
+            }
+            _httpClient.BaseAddress = new Uri(baseUrl);
         }
 
-        public const string _url = "http://phisix-api3.appspot.com/stocks.json";
-
+        /// <summary>
+        /// Возвращает список валют
+        /// </summary>
         public async Task<ResponseModel> GetData()
         {
             var response = await _httpClient.GetStringAsync("stocks.json");

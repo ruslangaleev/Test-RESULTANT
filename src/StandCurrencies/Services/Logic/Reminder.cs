@@ -1,27 +1,42 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
 using StandCurrencies.Services.Infrastructure;
-using StandCurrencies.Services.Interfaces;
-using StandCurrencies.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace StandCurrencies.Services.Logic
 {
+    /// <summary>
+    /// Напоминание
+    /// </summary>
     public class Reminder
     {
-        
         private readonly IHubContext<SignalServer> _hubContext;
 
-        public Reminder(
-            IHubContext<SignalServer> hubContext)
+        /// <summary>
+        /// Время опроса
+        /// </summary>
+        private readonly int _pollingTime;
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        public Reminder(IHubContext<SignalServer> hubContext,
+            IConfiguration configuration)
         {
-            
+            var pollingTime = configuration["Phisix:PollingTime"];
+            if (!int.TryParse(pollingTime, out _pollingTime))
+            {
+                throw new ArgumentNullException("Ошибка чтение конфига Phisix:PollingTime");
+            }
+
             _hubContext = hubContext ?? throw new ArgumentNullException(nameof(IHubContext<SignalServer>));
         }
 
+        /// <summary>
+        /// Запуск напоминания
+        /// </summary>
         public async Task Start()
         {
             Task.Run(async () =>
@@ -30,7 +45,7 @@ namespace StandCurrencies.Services.Logic
                 {
                     _hubContext.Clients.All.SendAsync("displayNotification");
 
-                    Thread.Sleep(15000);
+                    Thread.Sleep(_pollingTime);
                 }
             });
         }

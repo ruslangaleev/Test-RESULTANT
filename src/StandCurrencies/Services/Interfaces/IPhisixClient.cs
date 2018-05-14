@@ -1,7 +1,4 @@
 ﻿using StandCurrencies.ResourceModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace StandCurrencies.Services.Interfaces
@@ -11,6 +8,9 @@ namespace StandCurrencies.Services.Interfaces
     /// </summary>
     public interface IPhisixClient
     {
+        /// <summary>
+        /// Возвращает список валют
+        /// </summary>
         Task<ResponseModel> GetData();
     }
 }
