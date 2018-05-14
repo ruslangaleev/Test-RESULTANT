@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using StandCurrencies.ResourceModels;
 using StandCurrencies.Services.Interfaces;
 using StandCurrencies.ViewModel;
 using System;
@@ -28,11 +29,21 @@ namespace StandCurrencies.Controllers
         /// Возвращает список валют
         /// </summary>
         [HttpGet]
-        public async Task<DataModel[]> GetData()
+        public async Task<object> GetData()
         {
             List<DataModel> dataModels = new List<DataModel>();
 
-            var result = await _phisixClient.GetData();
+            ResponseModel result = null;
+
+            try
+            {
+                result = await _phisixClient.GetData();
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult("Не удалось получить данные с сервера");
+            }
+
             foreach (var entry in result.stock)
             {
                 dataModels.Add(new DataModel

@@ -41,6 +41,11 @@
                     tbody = tbody + '</tbody>'
 
                     $("#data").html('<table class="table">' + thead + tbody + '</table>');
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    var errorMessage = xhr.responseText;
+                    var message = '<div class="alert alert-danger">' + errorMessage + '</div>';
+                    $("#data").html(message);
                 }
             })
 
