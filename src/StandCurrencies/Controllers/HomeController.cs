@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StandCurrencies.Services.Interfaces;
+using StandCurrencies.ViewModel;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace StandCurrencies.Controllers
@@ -16,9 +18,22 @@ namespace StandCurrencies.Controllers
         }
 
         [HttpGet]
-        public async Task<object> GetLastData(int count = 50)
+        public async Task<DataModel[]> GetData()
         {
-            return await _phisixClient.GetLastData();
+            List<DataModel> dataModels = new List<DataModel>();
+
+            var result = await _phisixClient.GetData();
+            foreach (var entry in result.stock)
+            {
+                dataModels.Add(new DataModel
+                {
+                    Name = entry.name,
+                    Amount = entry.price.amount,
+                    Volume = entry.volume
+                });
+            }
+
+            return dataModels.ToArray();
         }
     }
 }
