@@ -41,7 +41,7 @@ namespace StandCurrencies.Controllers
                 dataModels.Add(new DataModel
                 {
                     Name = entry.name,
-                    Amount = entry.price.amount,
+                    Amount = entry.price.amount.ToString("0.00"),
                     Volume = entry.volume
                 });
             }
